@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "textual-cards"
+version = "0.1.0"
+description = ""
+authors = ["Anders Steen <anders.steen@knowit.no>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+textual = "^0.52.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.2"
+ruff = "^0.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.format]
+# Prefer single quotes over double quotes
+quote-style = "single"
