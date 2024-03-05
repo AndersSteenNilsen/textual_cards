@@ -1,3 +1,5 @@
+from itertools import batched
+
 from textual_cards.question_model import Question
 from markdown_it import MarkdownIt
 from markdown_it.tree import SyntaxTreeNode
@@ -17,7 +19,25 @@ def load_questions(path: str) -> Question:
     md_nodes = md.parse(content)
     md_tree = SyntaxTreeNode(md_nodes)
 
-    topic: str = md_tree.children[0].children[0].content
+    nodes_iterator = iter(md_tree.children)
+    topic: str = next(nodes_iterator).children[0].content
+
+    questions = []
+
+    for question_node, choice_node in batched(nodes_iterator, 2):
+        question: str = question_node.children[0].content
+        choices_raw: list[str] = [
+            n.children[0].children[0].content for n in choice_node.children
+        ]
+        choices = {}
+        for choice in choices_raw:
+            if '*' in choice:
+                choices[choice.replace('*', '').strip()] = True
+            else:
+                choices[choice.strip()] = False
+        questions.append(Question(topic, question, choices))
+    return questions
+
     question: str = md_tree.children[1].children[0].content
     choices_raw: list[str] = [
         n.children[0].children[0].content for n in md_tree.children[2].children
