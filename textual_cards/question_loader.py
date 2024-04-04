@@ -37,15 +37,3 @@ def load_questions(path: str) -> Question:
                 choices[choice.strip()] = False
         questions.append(Question(topic, question, choices))
     return questions
-
-    question: str = md_tree.children[1].children[0].content
-    choices_raw: list[str] = [
-        n.children[0].children[0].content for n in md_tree.children[2].children
-    ]
-    choices = {}
-    for choice in choices_raw:
-        if '*' in choice:
-            choices[choice.replace('*', '').strip()] = True
-        else:
-            choices[choice.strip()] = False
-    return Question(topic, question, choices)
